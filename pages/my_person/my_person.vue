@@ -51,7 +51,7 @@
 				        const tempFilePaths = chooseImageRes.tempFilePaths;
 						let ee = that.email;
 				        uni.uploadFile({
-				            url: 'http://localhost:80/info/upload', //仅为示例，非真实的接口地址
+				            url: 'http://192.168.43.249:80/info/upload', //仅为示例，非真实的接口地址
 				            filePath: tempFilePaths[0],
 				            name: 'file',
 							formData:{
