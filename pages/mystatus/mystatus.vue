@@ -7,14 +7,10 @@
 			<view class="title">
 				等级划分：
 			</view>
-			<view>
-				1~9级 是魂士境界
-			</view>
+			<view>1~9级 是魂士境界</view>
 			<view>10~19级 是魂师境界</view>
 			<view>20~29级 是大魂师境界</view>
-			<view>
-				30~39级 是魂尊境界
-			</view>
+			<view>30~39级 是魂尊境界</view>
 			<view>40~49级 是魂宗境界</view>
 			<view>50~59级 是魂王境界</view>
 			<view>60~69级 是魂帝境界</view>

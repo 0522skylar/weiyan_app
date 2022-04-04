@@ -1,5 +1,6 @@
 <template>
 	<view class="container">
+		<view class="status_bar"></view>
 		<h3>
 			{{title}}
 		</h3>
@@ -42,42 +43,69 @@
 			let name = options.name;
 			this.title = name;
 			if(this.title == '猜谚语') {
-				this.listKey = ['谚语','答案'];
-				this.getUrl = '/home/allegorical-challenge';
-				this.firstVal = 'riddle';
-				this.secondVal = 'answer';
-			}
-			else if(this.title == '猜歇后语') {
 				this.listKey = ['上句','下句'];
 				this.getUrl = '/home/proverb-challenge';
+				this.egtitle = 'proverb';
 				this.firstVal = 'front';
 				this.secondVal = 'behind';
+			}
+			else if(this.title == '猜歇后语') {
+				this.listKey = ['歇后语','答案'];
+				this.getUrl = '/home/allegorical-challenge';
+				this.egtitle = 'allegorical';
+				this.firstVal = 'riddle';
+				this.secondVal = 'answer';
 			}
 			else if(this.title == '猜谜语') {
 				this.listKey = ['谜语','答案'];
 				this.getUrl = '/home/riddle-challenge';
+				this.egtitle = 'riddle';
 				this.firstVal = 'quest';
 				this.secondVal = 'answer';
 			}
 			else if(this.title == '名言警句') {
 				this.listKey = ['名言警句','作者'];
 				this.getUrl = '/home/catchphrase-challenge';
+				this.egtitle = 'catchphrase';
 				this.firstVal = 'content';
 				this.secondVal = 'mrname';
 			}
 			else if(this.title == '猜字谜') {
 				this.listKey = ['字谜','答案'];
 				this.getUrl = '/home/charade-challenge';
+				this.egtitle = 'charade';
 				this.firstVal = 'content';
 				this.secondVal = 'answer';
 			}
 			else if(this.title == '一战到底') {
 				this.listKey = ['问题','答案'];
 				this.getUrl = '/home/challenge-challenge';
+				this.egtitle = 'challenge';
 				this.firstVal = 'quest';
 				this.secondVal = 'result';
 			}
-			this.getDate();
+			let ee = '';
+			if(this.$store.state.email.length == 0){
+				uni.getStorage({
+					key:'userInfo',
+					success:(res)=>{
+						ee = res.data.email;
+					}
+				});
+				this.email = ee;
+			}
+			else {
+				this.email = this.$store.state.email;
+			}
+			if(this.email.length != 0) {
+				this.getDate();
+			}
+			else {
+				uni.redirectTo({
+					url:'../login/login'
+				})
+				return;
+			}
 		},
 	
 		data() {
@@ -92,7 +120,9 @@
 				listKey:[],//页面显示的是什么内容
 				getUrl:'',//请求路径
 				firstVal:'',//数据库中的字段，
-				secondVal:''//数据库的第二个字段
+				secondVal:'',//数据库的第二个字段
+				egtitle:'',//英文标题
+				email: '',//邮箱
 			}
 		},
 		methods: {
@@ -118,7 +148,7 @@
 				this.list.sort(()=> {
 					return Math.random()-0.5;
 				})
-				
+				console.log(this.question[this.secondVal]);
 			},
 			isResult(text,index) {
 				if(!this.flag) {
@@ -146,17 +176,28 @@
 				this.flag = false;
 				if(this.curIndex == this.totalCount) {
 					let ans = Math.floor(this.count / this.totalCount*100);
-					uni.navigateTo({
-						url:'../challenge_over/challenge_over?count='+ans
+					let egtitle = this.egtitle;
+					uni.redirectTo({
+						url:'../challenge_over/challenge_over?count='+ans+'&kind='+egtitle
 					})
 				}
 			}
+		},
+		onShow() {
+
 		}
 	}
 </script>
 
 <style lang="scss" scoped>
 @import '../../static/css/animate.css';
+.container {
+	background-color: #def1e6;
+}
+.status_bar {
+	height: 50px;
+	width: 100%;
+}
 h3 {
 	text-align: center;
 }
@@ -169,9 +210,9 @@ h3 {
 	.line {
 		position: relative;
 		width: 100%;
-		height: 2px;
+		height: 4px;
 		margin: 15px 0;
-		background-color: #f1f2f6;
+		background-color: #fff;
 		.curPro {
 			height: 100%;
 			background-color: #27be9f;
@@ -190,9 +231,13 @@ h3 {
 	.questitle {
 		margin-top: 20px;
 	}
+	.quesBox{
+		margin-top: 20px;
+	}
 	.list-item {
 		padding: 15px;
-		border: 1px solid #ccc;
+		border: 1px solid #ddd;
+		box-shadow: 0 1px 6px 0px rgba(0, 69, 189, .1);
 		border-radius: 10px;
 		box-sizing: border-box;
 		margin-bottom: 20px;

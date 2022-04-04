@@ -38,16 +38,10 @@
 						"成语接龙","百科题库","判断句"
 					]
 				],
-				selected: [{
-						date: '2022-1-1'
-				   }, {
-					   date: '2022-1-3'
-				   }, {
-					   date: '2022-1-5'
-				   }, {
-					   date: '2022-1-6'
-				   }]
-				}
+				selected: [],
+				myAnalyse: {},
+				email:"",
+			}
 
 			
 		},
@@ -77,11 +71,61 @@
 			},
 			change(e) {
 			    console.log(e);
+			},
+			async getDate() {
+				let ee = this.email;
+				const res = await this.$myRuquest({
+					url: '/info/my-analyse/list',
+					data: {
+						email:ee
+					}
+				});
+				if(res.data.code != 200) {
+					uni.showModal({
+						content:res.data.msg
+					})
+					return;
+				}
+				this.myAnalyse = res.data.infos;
+				this.handlerList();
+			},
+			handlerList() {
+				let arr = this.myAnalyse.todaytotal;
+				arr.forEach((item) => {
+					if(item.challenge != 0) {
+						let obj = {};
+						obj.date = item.time;
+						this.selected.push(obj);
+					}
+				})
+				// console.log(this.selected);
 			}
-
 		},
 		components:{
 			searchInput
+		},
+		onShow() {
+			if(this.$store.state.email.length == 0){
+				uni.getStorage({
+					key:'userInfo',
+					success:(res)=>{
+						this.email = res.data.email;
+					}
+				});
+			}
+			else {
+				this.email = this.$store.state.email;
+			}
+			if(this.email.length != 0) {
+				this.getDate();
+			}
+			else {
+				//console.log(11111111);
+				uni.showModal({
+					content:'当前未登录'
+				})
+			}
+
 		}
 	}
 </script>

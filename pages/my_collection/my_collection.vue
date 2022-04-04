@@ -25,6 +25,7 @@
 						{{index+1}}. {{item}}
 					</navigator>
 				</view>
+				<view class="itttn" v-if="!riddle.length">暂无内容</view>
 		    </uni-collapse-item>
 		    <uni-collapse-item title="谚语">
 				
@@ -33,6 +34,7 @@
 						{{index+1}}. {{item}}
 					</navigator>
 				</view>
+				<view class="itttn" v-if="!proverb.length">暂无内容</view>
 		    </uni-collapse-item>
 			
 			<uni-collapse-item title="歇后语">
@@ -41,6 +43,7 @@
 						{{index+1}}. {{item}}
 					</navigator>
 				</view>
+				<view class="itttn" v-if="!allegorical.length">暂无内容</view>
 			</uni-collapse-item>
 			<uni-collapse-item title="成语">
 			    <view v-for="(item,index) in idiom" :key='index' class="itttn">
@@ -48,36 +51,41 @@
 						{{index+1}}. {{item}}
 					</navigator>
 				</view>
+				<view class="itttn" v-if="!idiom.length">暂无内容</view>
 			</uni-collapse-item>
 			
 			<uni-collapse-item title="名言警句">
 			    <view v-for="(item,index) in catchphrase" :key='index' class="itttn">
-				<navigator :url="'../collection_detail/collection_detail?title='+item+'&kind=catchphrase'">
-					{{index+1}}. {{item}}
-				</navigator>
+					<navigator :url="'../collection_detail/collection_detail?title='+item+'&kind=catchphrase'">
+						{{index+1}}. {{item}}
+					</navigator>
 				</view>
+				<view class="itttn" v-if="!catchphrase.length">暂无内容</view>
 			</uni-collapse-item>
 			<uni-collapse-item title="判断句">
 			    <view v-for="(item,index) in truefalse" :key='index' class="itttn">
-				<navigator :url="'../collection_detail/collection_detail?title='+item+'&kind=truefalse'">
-				{{index+1}}. {{item}}
-				</navigator>
+					<navigator :url="'../collection_detail/collection_detail?title='+item+'&kind=truefalse'">
+						{{index+1}}. {{item}}
+					</navigator>
 				</view>
+				<view class="itttn" v-if="!truefalse.length">暂无内容</view>
 			</uni-collapse-item>
 			
 			<uni-collapse-item title="一战到底">
 			    <view v-for="(item,index) in challenge" :key='index' class="itttn">
-				<navigator :url="'../collection_detail/collection_detail?title='+item+'&kind=challenge'">
-				{{index+1}}. {{item}}
-				</navigator>
+					<navigator :url="'../collection_detail/collection_detail?title='+item+'&kind=challenge'">
+						{{index+1}}. {{item}}
+					</navigator>
 				</view>
+				<view class="itttn" v-if="!challenge.length">暂无内容</view>
 			</uni-collapse-item>
 			<uni-collapse-item title="猜字谜">
 			    <view v-for="(item,index) in charade" :key='index' class="itttn">
-				<navigator :url="'../collection_detail/collection_detail?title='+item+'&kind=charade'">
-					{{index+1}}. {{item}}
-				</navigator>
+					<navigator :url="'../collection_detail/collection_detail?title='+item+'&kind=charade'">
+						{{index+1}}. {{item}}
+					</navigator>
 				</view>
+				<view class="itttn" v-if="!charade.length">暂无内容</view>
 			</uni-collapse-item>
 			
 			<uni-collapse-item title="对联">
@@ -86,6 +94,7 @@
 						{{index+1}}. {{item}}
 					</navigator>
 				</view>
+				<view class="itttn" v-if="!couplets.length">暂无内容</view>
 			</uni-collapse-item>
 			<uni-collapse-item title="百科题库">
 			    <view v-for="(item,index) in wikipedia" :key='index' class="itttn">
@@ -93,6 +102,7 @@
 				{{index+1}}. {{item}}
 				</navigator>
 				</view>
+				<view class="itttn" v-if="!wikipedia.length">暂无内容</view>
 			</uni-collapse-item>
 			
 			<uni-collapse-item title="十万个为什么">
@@ -101,6 +111,7 @@
 					{{index+1}}. {{item}}
 					</navigator>
 				</view>
+				<view class="itttn" v-if="!thousandwhy.length">暂无内容</view>
 			</uni-collapse-item>
 			<uni-collapse-item title="故事">
 			    <view v-for="(item,index) in story" :key='index' class="itttn">
@@ -108,6 +119,7 @@
 						{{index+1}}. {{item}}
 					</navigator>
 				</view>
+				<view class="itttn" v-if="!story.length">暂无内容</view>
 			</uni-collapse-item>
 			
 			<uni-collapse-item title="唐诗">
@@ -117,6 +129,7 @@
 						{{index+1}}. {{item}}
 					</navigator>
 				</view>
+				<view class="itttn" v-if="!poetry.length">暂无内容</view>
 			</uni-collapse-item>
 		
 		 
@@ -157,19 +170,27 @@
 						email:ee,
 					}
 				});
+				
+				if(res.data.code != 200) {
+					uni.showModal({
+						content:res.data.msg
+					})
+					return;
+				}
 				this.riddle = res.data.infos.riddle;
 				this.proverb = res.data.infos.proverb;
-				this.allegorical = res.data.infos.allegorical;
-				this.idiom = res.data.infos.idiom;
-				this.catchphrase = res.data.infos.catchphrase;
-				this.truefalse = res.data.infos.truefalse;
-				this.challenge = res.data.infos.challenge;
-				this.charade = res.data.infos.charade;
-				this.couplets = res.data.infos.couplets;
-				this.wikipedia = res.data.infos.wikipedia;
-				this.story = res.data.infos.story;
-				this.thousandwhy = res.data.infos.thousandwhy;
-				this.poetry = res.data.infos.poetry;
+				this.allegorical = res.data.infos.allegorical ;
+				this.idiom = res.data.infos.idiom ;
+				this.catchphrase = res.data.infos.catchphrase ;
+				this.truefalse = res.data.infos.truefalse ;
+				this.challenge = res.data.infos.challenge ;
+				this.charade = res.data.infos.charade ;
+				this.couplets = res.data.infos.couplets ;
+				this.wikipedia = res.data.infos.wikipedia ;
+				this.story = res.data.infos.story ;
+				this.thousandwhy = res.data.infos.thousandwhy ;
+				this.poetry = res.data.infos.poetry ;
+				
 			},
 			startSearch() {
 				let mytext = this.inpVal;
@@ -327,16 +348,33 @@
 			}
 		},
 		onLoad() {
-			uni.getStorage({
-			    key: 'userInfo',
-			    success:  (res) => {
-					this.email = res.data.email;
-			    }
-			});
-			uni.setNavigationBarTitle({
-			    title: '我的收藏'
-			});
-			this.getCollection();
+			let ee = '';
+			if(this.$store.state.email.length == 0){
+				uni.getStorage({
+					key:'userInfo',
+					success:(res)=>{
+						ee = res.data.email;
+					}
+				});
+				this.email = ee;
+			}
+			else {
+				this.email = this.$store.state.email;
+			}
+			
+			
+		},
+		onShow() {
+			setTimeout(()=>{
+				if(this.email.length != 0) {
+					this.getCollection();
+				}
+				else {
+					uni.redirectTo({
+						url:'../login/login'
+					})
+				}
+			},0)
 		}
 	}
 </script>
@@ -369,13 +407,12 @@
 	}
 	.msg {
 		font-size: 13px;
-		text-align: center;
-		padding: 20px;
-		
+		text-align: center;	
+		padding: 20px 0;
 	}
 	.list {
 		.itttn {
-			
+			background-color: #9fd6b7;
 			border-bottom: 1px dashed #ccc;
 			padding: 10px 20px;
 		}

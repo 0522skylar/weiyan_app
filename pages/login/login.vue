@@ -27,6 +27,7 @@
 </template>
 
 <script>
+	import store from '@/store/index.js'
 	export default {
 		data() {
 			return {
@@ -47,7 +48,7 @@
 						password: upsw,
 					}
 				});
-				console.log(res);
+			
 				if(res.data.code != 200) {
 					uni.showModal({
 						content:res.data.msg
@@ -58,10 +59,15 @@
 					uni.setStorage({
 						key:'userInfo',
 						data:res.data.userInfo
-					})
-					uni.switchTab({
-						url:'../index/index'
-					})
+					});
+					store.commit('setemail',uemail);
+					
+					
+					store.commit('setisLogin',true);
+					
+					uni.redirectTo({
+						url:'../browse/browse'
+					});
 				}
 			},
 			formReset: function(e) {

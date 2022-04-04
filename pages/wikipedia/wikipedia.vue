@@ -1,5 +1,6 @@
 <template>
 	<view class="container">
+		<view class="status_bar"></view>
 		<h3>
 			百科题库
 		</h3>
@@ -45,11 +46,31 @@
 				count:0,//赢了多少个
 				totalCount:5,//总共多少个,
 				flag: false,
-				selected:[]
+				selected:[],
+				email:''
 			};
 		},
 		onLoad() {
-			this.getDate();
+			if(this.$store.state.email.length == 0){
+				uni.getStorage({
+					key:'userInfo',
+					success:(res)=>{
+						this.email = res.data.email;
+					}
+				});
+			}
+			else {
+				this.email = this.$store.state.email;
+			}
+			if(this.email.length != 0) {
+				this.getDate();
+			}
+			else {
+				uni.redirectTo({
+					url:'../login/login'
+				})
+				return;
+			}
 		},
 		methods:{
 			async getDate() {
@@ -80,8 +101,9 @@
 						obj.sele = this.dataList.answerD;
 					}
 					this.selected.push(obj);
+					
 				}
-			
+				console.log(this.dataList.answer);
 			},
 			myquest(str,index) {
 					
@@ -107,8 +129,8 @@
 				this.curIndex++;
 				if(this.curIndex > this.totalCount) {
 					let ans = Math.floor(this.count / this.totalCount*100);
-					uni.navigateTo({
-						url:'../challenge_over/challenge_over?count='+ans
+					uni.redirectTo({
+						url:'../challenge_over/challenge_over?count='+ans+'&kind=wikipedia'
 					})
 				}
 				this.getDate();
@@ -121,6 +143,10 @@
 
 <style lang="scss" scoped>
 .container {
+	.status_bar {
+		height: 50px;
+		width: 100%;
+	}
 	background-color: #9fd6b757;
 	min-height: 100vh;
 }

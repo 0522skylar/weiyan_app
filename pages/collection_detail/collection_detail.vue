@@ -106,7 +106,7 @@
 				// console.log(kind,this.mongoList);
 				if(this.isCount) {
 					
-					this.collection.push(text);
+					
 					const res = await this.$myRuquest({
 						url: '/other/my-collection/add',
 						data: {

@@ -1,5 +1,6 @@
 <template>
 	<view class="container">
+		<view class="status_bar"></view>
 		<h3>成语接龙</h3>
 		<view class="mask" v-if="misShow"> 
 			<image src="https://img.soogif.com/xNZrf2i9tW1iO574XzGyNoaaTMEAawHz.gif_s400x0"></image>
@@ -55,11 +56,31 @@
 				curIndex: 1,// 当前第几个词
 				rightcount:5,// 选对多少个成语，没有出现答案都为选对
 				isNext:false,// 判断是否下一个成语
+				email:'',
 			};
 		},
 		onLoad() {
 			
-			this.getIdiom();
+			if(this.$store.state.email.length == 0){
+				uni.getStorage({
+					key:'userInfo',
+					success:(res)=>{
+						this.email = res.data.email;
+					}
+				});
+			}
+			else {
+				this.email = this.$store.state.email;
+			}
+			if(this.email.length != 0) {
+				this.getIdiom();
+			}
+			else {
+				uni.redirectTo({
+					url:'../login/login'
+				})
+				return;
+			}
 		},
 		methods:{
 			async getIdiom() {
@@ -106,8 +127,8 @@
 					this.seleWord = '';
 					if(this.curIndex == 6) {
 						let ans = Math.floor(this.rightcount / 5*100);
-						uni.navigateTo({
-							url:'../challenge_over/challenge_over?count='+ans
+						uni.redirectTo({
+							url:'../challenge_over/challenge_over?count='+ans+'&kind=idiom'
 						})
 					}
 					this.handleRandWord();
@@ -157,9 +178,13 @@
 
 <style lang="scss" scoped>
 .container {
+	.status_bar {
+		height: 50px;
+		width: 100%;
+	}
 	background-color: #9fd6b7;
 	width: 100vw;
-	height: 94vh;
+	height: 100vh;
 	h3 {
 		text-align: center;
 	}

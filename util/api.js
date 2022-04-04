@@ -1,5 +1,5 @@
-// const BASE_URL = "http://192.168.43.249:80/home";
-const BASE_URL = "http://localhost:80";
+const BASE_URL = "http://192.168.43.249:80";
+// const BASE_URL = "http://localhost:80";
 export const myRequest = (options) => {
 	return new Promise((resolve, reject) => {
 		uni.request({

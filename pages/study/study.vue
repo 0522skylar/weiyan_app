@@ -1,11 +1,12 @@
 <template>
 	<view class="content">
 		<view class="head">
-			<view class="hello">Hello Ameliani</view>
+			<view class="hello">Hello hhy</view>
 			<view class="text">
-				learn Leadership Training <text class="strong">Now</text>
+				Learn traditional Chinese cultureg <text class="strong">Now</text>
 			</view>
-			<searchInput/>
+			<searchInput />
+			
 		</view>
 		<br/>
 		<view class="list">
@@ -139,7 +140,8 @@
 	export default {
 		data() {
 			return {
-				list:[]
+				list:[],
+				
 			}
 		},
 		onLoad() {
@@ -152,7 +154,8 @@
 				})
 				this.list = res.data.rows;
 				console.log(res);
-			}
+			},
+			
 		},
 		components : {
 			searchInput

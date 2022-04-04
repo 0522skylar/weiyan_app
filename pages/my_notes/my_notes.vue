@@ -8,6 +8,7 @@
 			<input type="text" placeholder="回车可搜索" class="myinput" v-model="inpVal" @confirm="startSearch"/>
 			<text class="seaBtn" @click="startSearch">搜索</text>
 		</view>
+
 		<view class="msg list">
 			<text v-if="serAns.length==0">可点击查看详情</text>
 			<view class="itttn" v-for="(item,index) in serAns" :key='index'>
@@ -24,6 +25,7 @@
 						{{index+1}}. {{item.key}}
 					</navigator>
 				</view>
+				<view class="itttn" v-if="!riddle.length">暂无内容</view>
 		    </uni-collapse-item>
 		    <uni-collapse-item title="谚语">
 				
@@ -32,6 +34,7 @@
 						{{index+1}}. {{item.key}}
 					</navigator>
 				</view>
+				<view class="itttn" v-if="!proverb.length">暂无内容</view>
 		    </uni-collapse-item>
 			
 			<uni-collapse-item title="歇后语">
@@ -40,6 +43,7 @@
 						{{index+1}}. {{item.key}}
 					</navigator>
 				</view>
+				<view class="itttn" v-if="!allegorical.length">暂无内容</view>
 			</uni-collapse-item>
 			<uni-collapse-item title="成语">
 			    <view v-for="(item,index) in idiom" :key='index' class="itttn">
@@ -47,14 +51,16 @@
 						{{index+1}}. {{item.key}}
 					</navigator>
 				</view>
+				<view class="itttn" v-if="!idiom.length">暂无内容</view>
 			</uni-collapse-item>
 			
 			<uni-collapse-item title="名言警句">
 			    <view v-for="(item,index) in catchphrase" :key='index' class="itttn">
-				<navigator :url="'../note_detail/note_detail?title='+item.key+'&kind=catchphrase'">
-					{{index+1}}. {{item.key}}
-				</navigator>
+					<navigator :url="'../note_detail/note_detail?title='+item.key+'&kind=catchphrase'">
+						{{index+1}}. {{item.key}}
+					</navigator>
 				</view>
+				<view class="itttn" v-if="!catchphrase.length">暂无内容</view>
 			</uni-collapse-item>
 			<uni-collapse-item title="判断句">
 			    <view v-for="(item,index) in truefalse" :key='index' class="itttn">
@@ -62,6 +68,7 @@
 						{{index+1}}. {{item.key}}
 					</navigator>
 				</view>
+				<view class="itttn" v-if="!truefalse.length">暂无内容</view>
 			</uni-collapse-item>
 			
 			<uni-collapse-item title="一战到底">
@@ -70,6 +77,7 @@
 						{{index+1}}. {{item.key}}
 					</navigator>
 				</view>
+				<view class="itttn" v-if="!challenge.length">暂无内容</view>
 			</uni-collapse-item>
 			<uni-collapse-item title="猜字谜">
 			    <view v-for="(item,index) in charade" :key='index' class="itttn">
@@ -77,6 +85,7 @@
 						{{index+1}}. {{item.key}}
 					</navigator>
 				</view>
+				<view class="itttn" v-if="!charade.length">暂无内容</view>
 			</uni-collapse-item>
 			
 			<uni-collapse-item title="对联">
@@ -85,6 +94,7 @@
 						{{index+1}}. {{item.key}}
 					</navigator>
 				</view>
+				<view class="itttn" v-if="!couplets.length">暂无内容</view>
 			</uni-collapse-item>
 			<uni-collapse-item title="百科题库">
 			    <view v-for="(item,index) in wikipedia" :key='index' class="itttn">
@@ -92,6 +102,7 @@
 						{{index+1}}. {{item.key}}
 					</navigator>
 				</view>
+				<view class="itttn" v-if="!wikipedia.length">暂无内容</view>
 			</uni-collapse-item>
 			
 		</uni-collapse>
@@ -128,6 +139,13 @@
 						email:ee,
 					}
 				});
+				
+				if(res.data.code != 200) {
+					uni.showModal({
+						content:res.data.msg
+					})
+					return;
+				}
 				this.riddle = res.data.infos.riddle;
 				this.proverb = res.data.infos.proverb;
 				this.allegorical = res.data.infos.allegorical;
@@ -255,35 +273,7 @@
 					this.serAns.push(obj);
 				});
 				
-				ssr = this.story.filter(function (t) {
-					return t.key.search(mytext) > -1 ;
-				});
-				ssr.forEach((item) => {
-					let obj = {};
-					obj.text = item;
-					obj.kind = 'story';
-					this.serAns.push(obj);
-				});
 				
-				ssr = this.thousandwhy.filter(function (t) {
-					return t.key.search(mytext) > -1 ;
-				});
-				ssr.forEach((item) => {
-					let obj = {};
-					obj.text = item;
-					obj.kind = 'thousandwhy';
-					this.serAns.push(obj);
-				});
-				
-				ssr = this.poetry.filter(function (t) {
-					return t.key.search(mytext) > -1 ;
-				});
-				ssr.forEach((item) => {
-					let obj = {};
-					obj.text = item;
-					obj.kind = 'poetry';
-					this.serAns.push(obj);
-				});
 				
 				if(this.serAns.length == 0) {
 					uni.showToast({
@@ -298,16 +288,33 @@
 			}
 		},
 		onLoad() {
-			uni.getStorage({
-			    key: 'userInfo',
-			    success:  (res) => {
-					this.email = res.data.email;
-			    }
-			});
-			uni.setNavigationBarTitle({
-			    title: '我的笔记'
-			});
-			this.getnote();
+			let ee = '';
+			if(this.$store.state.email.length == 0){
+				uni.getStorage({
+					key:'userInfo',
+					success:(res)=>{
+						ee = res.data.email;
+					}
+				});
+				this.email = ee;
+			}
+			else {
+				this.email = this.$store.state.email;
+			}
+		
+			
+		},
+		onShow() {
+			setTimeout(()=>{
+				if(this.email.length != 0) {
+					this.getnote();
+				}
+				else {
+					uni.redirectTo({
+						url:'../login/login'
+					})
+				}
+			},0)
 		}
 	}
 </script>
@@ -341,12 +348,11 @@
 	.msg {
 		font-size: 13px;
 		text-align: center;
-		padding: 20px;
-		
+		padding: 20px 0;
 	}
 	.list {
 		.itttn {
-			
+			background-color: #9fd6b7;
 			border-bottom: 1px dashed #ccc;
 			padding: 10px 20px;
 		}

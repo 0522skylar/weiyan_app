@@ -79,12 +79,19 @@
 		},
 
 		onLoad(options) {
-			uni.getStorage({
-			    key: 'userInfo',
-			    success:  (res) => {
-					this.email = res.data.email;
-			    }
-			});
+	
+			if(this.$store.state.email.length == 0){
+				uni.getStorage({
+					key:'userInfo',
+					success:(res)=>{
+						this.email = res.data.email;
+					}
+				});
+			}
+			else {
+				this.email = this.$store.state.email;
+			}
+			
 			let ff = options.item;
 			this.title = options.title;
 			
@@ -150,6 +157,12 @@
 				let kind = this.kind;
 				let email = this.email;
 				let text = this.mongoList[this.activeIndex][this.idKey];
+				if(this.email.length == 0) {
+					uni.redirectTo({
+						url:'../login/login'
+					})
+					return;
+				}
 				// console.log(kind,this.mongoList);
 				if(this.isCount) {
 					
@@ -203,6 +216,12 @@
 					uni.showToast({
 						icon:'error',
 						title:'输入框不能为空哟'
+					})
+					return;
+				}
+				if(this.email.length == 0) {
+					uni.redirectTo({
+						url:'../login/login'
 					})
 					return;
 				}
@@ -271,15 +290,31 @@
 			
 				
 			},
-			afterIndex() {
+			async afterIndex() {
 				this.InShow = 'Right';
 				this.OutShow = 'Left';
 				this.inpVal = '';
 				if(this.activeIndex == this.mongoList.length-1) {
 					uni.showToast({
-						title: '最后一个啦',
+						title: '最后一个啦,今日学习任务已完成，去做题吧',
 						icon:'none',
 						duration: 1000
+					});
+					let ee = this.email;
+					let month = new Date().getMonth()+1;
+					let yaer = new Date().getFullYear();
+					let day = new Date().getDate();
+					let obj = {
+						study:20,
+						challenge:0,
+						time:yaer + '-' +month+'-'+day
+					}
+					const res = await this.$myRuquest({
+						url: '/info/my-analyse/study',
+						data: {
+							email:ee,
+							total:obj
+						}
 					});
 					return;
 				}

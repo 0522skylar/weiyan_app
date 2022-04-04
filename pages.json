@@ -75,7 +75,11 @@
             "style" :                                                                                    
             {
                 "navigationBarTitleText": "挑战",
-                "enablePullDownRefresh": false
+                "enablePullDownRefresh": false,
+				"app-plus": {
+					"titleNView":false,
+					"animationType":"slide-in-bottom"
+				}
             }
             
         }
@@ -101,8 +105,12 @@
             "path" : "pages/challenge_over/challenge_over",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
+                "navigationBarTitleText": "挑战结束",
+                "enablePullDownRefresh": false,
+				"app-plus": {// 取消顶部导航栏
+					"titleNView":false,
+					"animationType":"slide-in-bottom"
+				}
             }
             
         }
@@ -129,7 +137,11 @@
             "style" :                                                                                    
             {
                 "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
+                "enablePullDownRefresh": false,
+				"app-plus": {// 取消顶部导航栏
+					"titleNView":false,
+					"animationType":"slide-in-bottom"
+				}
             }
             
         }
@@ -138,7 +150,11 @@
             "style" :                                                                                    
             {
                 "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
+                "enablePullDownRefresh": false,
+				"app-plus": {
+					"titleNView":false,
+					"animationType":"slide-in-bottom"
+				}
             }
             
         }
@@ -147,7 +163,11 @@
             "style" :                                                                                    
             {
                 "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
+                "enablePullDownRefresh": false,
+				"app-plus": {
+					"titleNView":false,
+					"animationType":"slide-in-bottom"
+				}
             }
             
         }
@@ -191,7 +211,7 @@
             "path" : "pages/my_collection/my_collection",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+                "navigationBarTitleText": "我的收藏",
                 "enablePullDownRefresh": false
             }
             
@@ -200,16 +220,17 @@
             "path" : "pages/my_notes/my_notes",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+                "navigationBarTitleText": "我的笔记",
                 "enablePullDownRefresh": false
+				
             }
-            
+        
         }
         ,{
             "path" : "pages/my_analyse/my_analyse",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+                "navigationBarTitleText": "做题分析",
                 "enablePullDownRefresh": false
             }
             
@@ -245,7 +266,7 @@
             "path" : "pages/collection_detail/collection_detail",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+                "navigationBarTitleText": "收藏详情",
                 "enablePullDownRefresh": false
             }
             
@@ -254,7 +275,7 @@
             "path" : "pages/note_detail/note_detail",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+                "navigationBarTitleText": "笔记详情",
                 "enablePullDownRefresh": false
             }
             
@@ -267,6 +288,7 @@
 		"backgroundColor": "#F8F8F8",
 		"enablePullDownRefresh": true,
 		"backgroundTextStyle": "light"
+	
 	},
 	"tabBar":{
 		"selectedColor":"#4ea5b6",

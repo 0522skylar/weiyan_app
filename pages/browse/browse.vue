@@ -37,8 +37,8 @@
 				</view>
 				<view class="comment">
 					<text>{{item.kind}}</text>
-					<text>3021阅读</text>
-					<text>23评</text>
+					<!-- <text>3021阅读</text>
+					<text>23评</text> -->
 				</view>
 				
 			</view>
@@ -58,7 +58,7 @@
 				dataList:[], // 浏览下滑部分
 				showName:'one',
 				sreachText:'',
-				tabName:['十万个为什么','故事大全','唐诗三百首','热评'],
+				tabName:['十万个为什么','故事大全','唐诗三百首'],
 				clickCount:0,// 当前点击的是哪个tab，用于判断高亮
 				hotList:[], // 热点排行榜
 				more:'more',// 触底加载更多文本变化
@@ -70,6 +70,9 @@
 		onShow() {
 			this.getList();
 			this.getHotList();
+			uni.setNavigationBarTitle({
+			    title: '首页'
+			});
 		},
 		methods:{
 			async getList() {

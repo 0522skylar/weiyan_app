@@ -5,20 +5,32 @@
 		   <view class="left">
 			   <p class="text">恭喜你,完成本次挑战</p>
 				<p class="small">每天努力一点点,知道你在改变</p>
-				<img src="https://iconfont.alicdn.com/t/fd2fe95e-e379-4b51-97f2-0af8a33129b4.png" alt="">
+				<image src="../../static/girl.png" mode="" class="girl"></image>
 		   </view>
+		   
+	
 		   <view class="right">
 			   <view class="top">
-				   本次正确率为
+				   获得积分为：
 			   </view>
 			   <p class="count animate__animated animate__rubberBand">{{result}}</p>
 		   </view>
 		   
 		</view> 
+		
+		<view class="huan">
+		  <view class="charts-box">
+		    <qiun-data-charts
+		      type="arcbar"
+		      :chartData="chartData"
+		      background="none"
+		    />
+		  </view>
+		  
+		  <view class="myprogress">{{progress}}</view>
+		</view>
 		<view class="body">
-			<view>
-				<img src="https://iconfont.alicdn.com/t/a572e6b9-a323-4a47-9886-2b5745df4373.png" alt="">
-			</view>
+	
 			<view class="btn">
 				<button class="again" @click="gotoAgain">再测一次</button>
 				<button class="gohome" @click="gotoHome">完成挑战</button>
@@ -33,7 +45,18 @@
 		data() {
 			return {
 				count:'',
-				result:''
+				result:'',
+				email:'',
+				chartData:{
+					"series": [
+						{
+							"name": "正确率",
+							"data": 0,
+							"color": "#2fc25b"
+						}
+					]
+				},
+				progress:''
 			}
 		},
 		methods: {
@@ -46,21 +69,84 @@
 				uni.switchTab({
 					url:'../challenge/challenge'
 				})
+			},
+			async getnote() {
+				let ee = this.email;
+				let num = this.count / 20;
+				let kind = this.kind;
+				let mouth = new Date().getMonth()+1;
+				let day = new Date().getDate();
+				let year = new Date().getFullYear();
+				let time = year + '-'+mouth +'-'+day;
+				let obj = {};
+				obj.study =0;
+                obj.challenge=num;
+                obj.time=time;
+				// console.log(obj);
+				const res = await this.$myRuquest({
+					url: '/info/my-analyse/add',
+					data: {
+						email:ee,
+						num:num,
+						kind:kind,
+						total:obj
+					}
+				});
+				// console.log(res);
+			},
+			async getSum() {
+				let addsum = Number(this.result);
+				let ee = this.email;
+				const res = await this.$myRuquest({
+					url: '/info/add-statu',
+					data: {
+						email:ee,
+						addCount: addsum
+					}
+				});
 			}
 		},
 		onLoad(options) {
-			
+			if(this.$store.state.email.length == 0){
+				uni.getStorage({
+					key:'userInfo',
+					success:(res)=>{
+						this.email = res.data.email;
+					}
+				});
+			}
+			else {
+				this.email = this.$store.state.email;
+			}
+ 			
 			this.count = options.count;
-			this.result = this.count + '%';
+			this.result = '+' + (this.count / 20);
+			this.chartData.series[0].data = (this.count / 100);
+			this.progress = this.count + '%';
 			
+			this.kind = options.kind;
+			this.getSum();
+			this.getnote();
 		}
 	}
 </script>
 
 <style lang="scss" scoped>
-@import '../../static/css/animate.css';
 .container {
-	
+	.huan {
+		position: relative;
+		width: 100%;
+		height: 250px;
+		.myprogress {
+			position: absolute;
+			top: 39%;
+			left: 40%;
+			background-color: #fff;
+			color: #f00;
+			text-align: center;
+			font-size: 28px;
+		}
+	}
 	h3 {
 	    text-align: center;
 	}
@@ -73,16 +159,16 @@
 	    display: flex;
 	    .left {
 	        padding-left: 20px;
+			.girl {
+				width: 50px;
+				height: 50px;
+			}
 	        .text {
 	            font-size: 18px;
 	            padding-top: 10px;
 	        }
 	        .small {
 	            font-size: 12px;
-	        }
-	        img {
-	            width: 50px;
-	            height: 50px;
 	        }
 	    }
 	    .right {
@@ -127,6 +213,10 @@
 	        background-color: $lingColor;
 	        color: #fff;
 	    }
+		.challenge {
+			width: 240px;
+			height: 240px;
+		}
 	}
 }
 </style>

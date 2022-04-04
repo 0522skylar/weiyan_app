@@ -53,6 +53,7 @@
 						title:text
 					}
 				});
+				
 				let arr = res.data.rows[0];
 				let str = arr.content.replace(/&hellip;/g,'...');
 				if(this.select == 2){
@@ -98,6 +99,12 @@
 				let kind = this.mytext;
 				let email = this.email;
 				let text = this.title;
+				if(this.email.length == 0) {
+					uni.redirectTo({
+						url:'../login/login'
+					})
+					return;
+				}
 				// console.log(kind,this.mongoList);
 				if(this.isCount) {
 					
@@ -135,6 +142,42 @@
 				this.isZan = !this.isZan;
 				this.addTxt = this.isZan?'已点赞':'点赞';
 			},
+			async getSub() {
+				
+				let ee = this.email;
+				const res = await this.$myRuquest({
+					url: '/info/sub-statu',
+					data: {
+						email:ee,
+						subCount: 2
+					}
+				});
+			
+				
+				if(res.data.code === 403) {
+					uni.showLoading({
+						title: res.data.msg
+					});
+					
+					setTimeout(function () {
+						uni.hideLoading();
+						uni.switchTab({
+							url:'../challenge/challenge'
+						})
+					}, 1000);
+					
+				}
+				if(res.data.code === 200) {
+					uni.showLoading({
+						title: '当前消耗2积分'
+					});
+					
+					setTimeout(function () {
+						uni.hideLoading();
+						
+					}, 1000);
+				}
+			}
 		},
 		onLoad(option) {
 			this.title = option.title;
@@ -152,13 +195,32 @@
 			else {
 				this.mytext = 'poetry';
 			}
-			this.getTitle();
-			uni.getStorage({
-			    key: 'userInfo',
-			    success:  (res) => {
-					this.email = res.data.email;
-			    }
-			});
+			
+			
+			let ee = '';
+			if(this.$store.state.email.length == 0){
+				uni.getStorage({
+					key:'userInfo',
+					success:(res)=>{
+						ee = res.data.email;
+					}
+				});
+				this.email = ee;
+			}
+			else {
+				this.email = this.$store.state.email;
+			}
+			if(this.email.length != 0) {
+				this.getTitle();
+			}
+			else {
+				uni.redirectTo({
+					url:'../login/login'
+				})
+			}
+		},
+		onShow() {
+			this.getSub();
 		}
 	}
 </script>

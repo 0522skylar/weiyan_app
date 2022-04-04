@@ -1,5 +1,6 @@
 <template>
 	<view class="container">
+		<view class="status_bar"></view>
 		<h3>
 			判断题
 		</h3>
@@ -46,11 +47,32 @@
 				flag: false,
 				selected:[],
 				ttshow:'none',
-				ffshow:'none'
+				ffshow:'none',
+				email:''
 			};
 		},
 		onLoad() {
-			this.getDate();
+			if(this.$store.state.email.length == 0){
+				uni.getStorage({
+					key:'userInfo',
+					success:(res)=>{
+						this.email = res.data.email;
+					}
+				});
+			}
+			else {
+				this.email = this.$store.state.email;
+			}
+			if(this.email.length != 0) {
+				this.getDate();
+			}
+			else {
+				uni.redirectTo({
+					url:'../login/login'
+				})
+				return;
+			}
+			
 		},
 		methods:{
 			async getDate() {
@@ -103,8 +125,8 @@
 				this.curIndex++;
 				if(this.curIndex > this.totalCount) {
 					let ans = Math.floor(this.count / this.totalCount*100);
-					uni.navigateTo({
-						url:'../challenge_over/challenge_over?count='+ans
+					uni.redirectTo({
+						url:'../challenge_over/challenge_over?count='+ans+'&kind=truefalse'
 					})
 				}
 				this.getDate();
@@ -118,6 +140,10 @@
 
 <style lang="scss" scoped>
 .container {
+	.status_bar {
+		height: 50px;
+		width: 100%;
+	}
 	background-color: #9fd6b757;
 	min-height: 100vh;
 }

@@ -10,7 +10,7 @@
 		<uni-drawer ref="showRight" mode="right" :mask-click="false">
 			<scroll-view style="height: 100%;" scroll-y="true">
 				<button @click="closeDrawer" class="drawerBtn">关闭</button>
-				<view v-for="(item,index) in gameLiat" :key="item.id" class="drawName" @click="jump(item.cid)">{{index+1}}. {{ item.name }}</view>
+				<view v-for="(item,index) in gameLiat" :key="item.id" class="drawName" @click="jump(item.cid)">{{ item.name }}</view>
 			</scroll-view>
 		</uni-drawer>
 	</view>
@@ -96,6 +96,18 @@
 				}).exec()
 			}
 
+		},
+		beforeCreate() {
+			console.log('beforeCreate');
+		},
+		mounted() {
+			console.log('mounted');
+		},
+		beforeDestroy() {
+			console.log('beforeDestroy');
+		},
+		destroyed() {
+			console.log('destroyed');
 		}
 	}
 </script>

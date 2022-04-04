@@ -5,11 +5,12 @@
 				<image src="../../static/logo.png" mode=""></image>
 			</view>
 			
-			<h1>诗词歌赋</h1>
+			<h1>微言</h1>
 			<view class="buttons_irzW">
 				<view class="info" 
 				@click="gotoLogin()"
-				>登录
+				>
+				登录
 					<image src="/static/icon/right-arrow.svg" width="20" height="20" class="start-arrow_3MeT"></image>
 				</view>
 				<view class="btn" @click="gotoStudy()">快速开始</view>
@@ -28,15 +29,18 @@
 				islogin:true
 			}
 		},
-		onLoad() {
+		onShow() {
 			uni.getStorage({
 			    key: 'userInfo',
 			    success:  (res) => {
-					uni.redirectTo({
-						url:'../browse/browse'
-					})
+					if(res.data !== null) {
+						uni.redirectTo({
+							url:'../browse/browse'
+						})
+					}
 			    }
 			});
+			this.pushLocation();
 		},
 		methods: {
 			gotoLogin(){
@@ -55,6 +59,34 @@
 				uni.navigateTo({
 					url:"/pages/test/test"
 				})
+			},
+			async pushLocation() {
+				let address = null;
+				const that = this;
+				uni.getLocation({
+					type: 'gcj02',
+					geocode: true,
+					success: async (res) => {
+						address.street = res.address.street;// 街道信息
+						address.district = res.address.district;//区县名称
+						address.streetNum = res.address.streetNum;// 获取街道门牌号信息
+						address.poiName = res.address.poiName;// POI信息
+						address.cityCode = res.address.cityCode;// 城市代号
+						console.log(address)
+						const obj = await that.$myRuquest({
+							url: '/info/getUserInfo',
+							method: 'POST',
+							data: {
+								address
+							}
+						})
+						console.log(obj)
+					},
+					fail: (err) => {
+						console.log(err)
+					}
+				});
+				
 			}
 		}
 	}
@@ -64,7 +96,7 @@
 	.container {
 		
 		align-items: center;
-		background-image: url(https://lf-cdn-tos.bytescm.com/obj/static/webinfra/modern-js-website/assets/images/banner-mobile-bg-9d94c86efc8d6cf60c026b28f4536fa6.png);
+		background-image: url('../../static/yangwang.png');
 		padding: 2rem;
 		
 		background-position: bottom;
