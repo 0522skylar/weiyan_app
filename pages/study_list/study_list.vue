@@ -24,7 +24,9 @@
 				state:"more",
 				pageNum:1,
 				totalCount:500,
-				key:""
+				key:"",
+				userAnalyse: null,
+				data_index: null
 			}
 		},
 		onLoad(options) {
@@ -33,10 +35,29 @@
 			uni.setNavigationBarTitle({
 			    title: this.title
 			});
-			
+		},
+		onShow() {
+			let myMap = new Map();
+			myMap.set('成语', 'idiom');
+			myMap.set('谚语', 'proverb');
+			myMap.set('歇后语', 'allegorical');
+			myMap.set('谜语', 'riddle');
+			myMap.set('字谜', 'charade');
+			myMap.set('对联', 'couplets');
+			let indexKey = myMap.get(this.title);
+			this.data_index = indexKey;
+			uni.getStorage({
+				key: 'userAnalyse',
+				success: (res) => {
+					this.userAnalyse = res.data;
+					
+					this.pageNum =res.data[indexKey]===undefined ? 1 : (res.data[indexKey] / 20) + 1;
+					console.log('res.data', this.pageNum, res.data[indexKey])
+				}
+			})
+			console.log(this.userAnalyse)
 			this.getList();
 		},
-		
 		methods: {
 			navgoto(item) {
 				
@@ -46,7 +67,7 @@
 			},
 			clearList() {
 				this.list = [];
-				this.pageNum = 1;
+				this.pageNum =this.userAnalyse[this.data_index]===0 ? 1 : (this.userAnalyse[this.data_index] / 20) + 1;
 				this.getList();
 			},
 			async getList() {
@@ -58,7 +79,6 @@
 				else if(this.title == '谚语') {
 					findUrl = '/home/proverb';
 					this.key = 'front';
-					
 				}
 				else if(this.title == '歇后语') {
 					findUrl = '/home/allegorical';
@@ -78,6 +98,7 @@
 				}
 				
 				let pageNum = this.pageNum;
+				// console.log(222, pageNum)
 				const res = await this.$myRuquest({
 					url: findUrl,	
 					data:{
@@ -86,8 +107,6 @@
 				})
 				
 				this.list.push(...res.data.rows);
-				
-			
 			},
 			clickLoadMore(e) {
 				console.log(e);

@@ -24,7 +24,9 @@
 				more:"more",
 				pageNum:1,
 				totalCount:500,
-				key:""
+				key:"",
+				userAnalyse: null,
+				data_index: null
 			}
 		},
 		onLoad(options) {
@@ -34,9 +36,28 @@
 			    title: this.title
 			});
 			
+			// this.getList();
+		},
+		onShow() {
+			let myMap = new Map();
+			myMap.set('名言警句', 'catchphrase');
+			myMap.set('判断题', 'truefalse');
+			myMap.set('一战到底', 'challenge');
+			myMap.set('百科全书', 'wikipedia');
+
+			let indexKey = myMap.get(this.title);
+			this.data_index = indexKey;
+			uni.getStorage({
+				key: 'userAnalyse',
+				success: (res) => {
+					this.userAnalyse = res.data;
+					this.pageNum =res.data[indexKey]===undefined ? 1 : (res.data[indexKey] / 20) + 1;
+					console.log('res.data', this.pageNum, res.data[indexKey])
+				}
+			})
+			console.log(this.userAnalyse)
 			this.getList();
 		},
-		
 		methods: {
 			navgoto(item) {
 				
@@ -76,7 +97,7 @@
 						page:pageNum
 					}
 				})
-				
+				console.log(res.data.rows)
 				this.list.push(...res.data.rows);
 				
 			

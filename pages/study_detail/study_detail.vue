@@ -67,6 +67,7 @@
 				isMask:false, // 是否显示添加笔记遮罩层
 				isShow:false, // 是否显示笔记框
 				inpVal:'',// 添加到笔记的文字
+				isEnd: false,// 判断是否已经点击过最后一个了
 			}
 		},
 		onLoad(options) {
@@ -271,30 +272,49 @@
 				this.InShow = 'Right';
 				this.OutShow = 'Left';
 				this.inpVal = '';
+				
 				if(this.activeIndex == this.mongoList.length-1) {
-					uni.showToast({
-						title: '最后一个啦,今日学习任务已完成，去做题吧',
-						icon:'none',
-						duration: 1000
-					});
 					let ee = this.email;
 					let month = new Date().getMonth()+1;
 					let yaer = new Date().getFullYear();
 					let day = new Date().getDate();
 					let obj = {
-						study:20,
+						study:this.mongoList.length,
 						challenge:0,
 						time:yaer + '-' +month+'-'+day
 					}
-					const res = await this.$myRuquest({
-						url: '/info/my-analyse/study',
-						data: {
-							email:ee,
-							total:obj
+					if(!this.isEnd) {
+						console.log(111,this.isEnd);
+						const res = await this.$myRuquest({
+							url: '/info/my-analyse/study',
+							data: {
+								email:ee,
+								total:obj
+							}
+						});
+						const ans = await this.$myRuquest({
+							url: '/info/study-log/add',
+							method: 'POST',
+							data: {
+								email: ee,
+								kind: this.kind,
+								num: this.activeIndex+1
+							}
+						});
+						console.log(ans)
+						this.isEnd = true;
+					}
+					uni.showModal({
+						title: '最后一个啦,今日学习任务已完成，去做题吧',
+						confirmText: '去挑战',
+						success: (res) => {
+							if(res.confirm) {
+								this.goOtherPage()
+							}
 						}
 					});
-					return;
 					
+					return;
 				}
 				this.activeIndex++;
 				let text = this.mongoList[this.activeIndex][this.idKey];
@@ -316,6 +336,11 @@
 					this.isAdd = false;
 					this.addTxt = '笔记';
 				}
+			},
+			goOtherPage() {
+				uni.switchTab({
+					url: '../challenge/challenge'
+				})
 			}
 		}
 	}

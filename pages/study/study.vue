@@ -1,7 +1,7 @@
 <template>
 	<view class="content">
 		<view class="head">
-			<view class="hello">Hello hhy</view>
+			<view class="hello">Hello {{userName}}</view>
 			<view class="text">
 				Learn traditional Chinese cultureg <text class="strong">Now</text>
 			</view>
@@ -141,11 +141,29 @@
 		data() {
 			return {
 				list:[],
-				
+				userName: 'user',
+				analyse: null
 			}
 		},
 		onLoad() {
-			
+			if(this.$store.state.email.length == 0){
+				uni.getStorage({
+				    key: 'userInfo',
+				    success:  (res) => {
+						this.email = res.data?.email;
+						this.getStudyList();
+						if(res.data != null) {
+							this.userName = res.data.username
+						}
+				    }
+				});
+			}
+			else {
+				this.getStudyList();
+			}
+		},
+		onShow() {
+			this.getStudyList();
 		},
 		methods: {
 			async getList() {
@@ -155,7 +173,20 @@
 				this.list = res.data.rows;
 				console.log(res);
 			},
-			
+			async getStudyList() {
+				const ans = await this.$myRuquest({
+					url: '/info/study-log/list',
+					method: 'POST',
+					data: {
+						email: this.email
+					}
+				});
+				uni.setStorage({
+					key: 'userAnalyse',
+					data: ans.data.info
+				})
+				// console.log(ans)
+			}
 		},
 		components : {
 			searchInput
