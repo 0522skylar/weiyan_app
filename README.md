@@ -52,7 +52,7 @@ https://github.com/tiantianhy/weiyan_app/blob/main/readme-image/image-2022050812
 
 ### 界面设计如下：
 
-首页：
+#### 首页：
 
 
 
@@ -62,19 +62,19 @@ https://github.com/tiantianhy/weiyan_app/blob/main/readme-image/image-2022050812
 
 
 
-学习页面：
+#### 学习页面：
 
 ![image-20220508125444616](./readme-image/image-20220508125444616.png)
 
 
 
-挑战页面：
+#### 挑战页面：
 
 ![image-20220508125630627](./readme-image/image-20220508125630627.png)
 
 
 
-我的页面：
+#### 我的页面：
 
 ![image-20220508125724190](./readme-image/image-20220508125724190.png)
 
