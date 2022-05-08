@@ -28,9 +28,31 @@ git remote add origin https://github.com/tiantianhy/weiyan_app.git
 
  push -u origin master
 
-![image-20220508122710430](https://github.com/tiantianhy/weiyan_app/blob/main/readme-image/image-20220508122710430.png)
 
-、、-----------------
+
+
+
+### 插入图片路径显示问题
+
+不显示
+
+.\readme-image\image-20220508122710430.png
+
+显示：
+
+https://github.com/tiantianhy/weiyan_app/blob/main/readme-image/image-20220508122710430.png
+
+./readme-image/image-20220508122710430.png
+
+
+
+注意正反斜杆问题
+
+
+
+### 界面设计如下：
+
+首页：
 
 
 
@@ -40,8 +62,19 @@ git remote add origin https://github.com/tiantianhy/weiyan_app.git
 
 
 
-、、---------------
+学习页面：
+
+![image-20220508125444616](./readme-image/image-20220508125444616.png)
 
 
 
-![image-20220508122710430](.\readme-image\image-20220508122710430.png)
+挑战页面：
+
+![image-20220508125630627](./readme-image/image-20220508125630627.png)
+
+
+
+我的页面：
+
+![image-20220508125724190](./readme-image/image-20220508125724190.png)
+
