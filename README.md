@@ -2,7 +2,7 @@
 
 
 
-### 代码提交
+### 代码提交  
 
 
 
@@ -14,7 +14,7 @@ git switch main
 
 git remote add github https://github.com/tiantianhy/weiyan_app.git
 
- push -u github main
+ push -u github main  
 
 
 
