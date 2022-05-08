@@ -28,6 +28,20 @@ git remote add origin https://github.com/tiantianhy/weiyan_app.git
 
  push -u origin master
 
+![image-20220508122710430](https://github.com/tiantianhy/weiyan_app/blob/main/readme-image/image-20220508122710430.png)
+
+、、-----------------
+
+
+
+![image-20220508122710430](./readme-image/image-20220508122710430.png)
+
+
+
+
+
+、、---------------
+
 
 
 ![image-20220508122710430](.\readme-image\image-20220508122710430.png)
