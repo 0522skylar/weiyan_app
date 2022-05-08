@@ -53,10 +53,9 @@
 					
 					this.pageNum =res.data[indexKey]===undefined ? 1 : (res.data[indexKey] / 20) + 1;
 					console.log('res.data', this.pageNum, res.data[indexKey])
+					this.getList();
 				}
 			})
-			console.log(this.userAnalyse)
-			this.getList();
 		},
 		methods: {
 			navgoto(item) {
@@ -102,7 +101,8 @@
 				const res = await this.$myRuquest({
 					url: findUrl,	
 					data:{
-						page:pageNum
+						page:pageNum,
+						obj: this.userAnalyse
 					}
 				})
 				

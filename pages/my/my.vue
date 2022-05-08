@@ -112,7 +112,7 @@
 							store.commit('setemail','');
 							store.commit('setisLogin',false);
 							_self.isLogin = false;
-							_self.imgurl = 'http://localhost:80/img/author.png';
+							_self.imgurl = 'http://192.168.43.249:80/img/author.png';
 					        uni.showToast({
 					        	title:'您已退出，当前不能进入浏览页面'
 					        })
@@ -173,14 +173,15 @@
 			}
 		},
 		onShow() {
-			if(this.$store.state.email.length == 0){
+			// this.getNew();
+			// if(this.$store.state.email.length == 0){
 				uni.getStorage({
 				    key: 'userInfo',
 				    success:  (res) => {
 						this.email = res.data?.email;
 						if(res.data != null) {
 							if(res.data.avatorImg.length != 0) {
-								this.imgurl = 'http://localhost:80/img/'+res.data.avatorImg;
+								this.imgurl = 'http://192.168.43.249:80/img/'+res.data.avatorImg;
 							}
 							if(this.email.length != 0) {
 								this.isLogin = true;
@@ -192,12 +193,11 @@
 						
 				    }
 				});
-			}
-			else {
-				this.email = this.$store.state.email;
-				this.isLogin = true;
-			}
-			this.getNew();
+			// }
+			// else {
+			// 	this.email = this.$store.state.email;
+			// 	this.isLogin = true;
+			// }
 		},
 		onLoad() {
 		},

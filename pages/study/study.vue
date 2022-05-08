@@ -146,23 +146,37 @@
 			}
 		},
 		onLoad() {
-			if(this.$store.state.email.length == 0){
+			// if(this.$store.state.email.length == 0){
 				uni.getStorage({
 				    key: 'userInfo',
 				    success:  (res) => {
-						this.email = res.data?.email;
+						this.email = res.data.email;
+						console.log(this.email)
 						this.getStudyList();
 						if(res.data != null) {
 							this.userName = res.data.username
 						}
 				    }
 				});
-			}
-			else {
-				this.getStudyList();
-			}
+			// }
+			// else {
+			// 	console.log(111, this.$store.state.email);
+			// 	this.email = this.$store.state.email;
+			// 	this.getStudyList();
+			// }
 		},
 		onShow() {
+			uni.getStorage({
+			    key: 'userInfo',
+			    success:  (res) => {
+					this.email = res.data.email;
+					console.log(this.email)
+					this.getStudyList();
+					if(res.data != null) {
+						this.userName = res.data.username
+					}
+			    }
+			});
 			this.getStudyList();
 		},
 		methods: {

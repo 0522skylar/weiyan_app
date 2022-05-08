@@ -167,6 +167,7 @@
 						duration:2000,
 						icon:'none'
 					})
+					return;
 				}
 				this.curIndex++;
 				

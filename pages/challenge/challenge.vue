@@ -87,6 +87,7 @@
 					return;
 				}
 				this.myAnalyse = res.data.infos;
+				this.selected = []
 				this.handlerList();
 			},
 			handlerList() {
@@ -98,7 +99,6 @@
 						this.selected.push(obj);
 					}
 				})
-				// console.log(this.selected);
 			}
 		},
 		components:{

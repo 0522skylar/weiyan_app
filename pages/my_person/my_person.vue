@@ -1,9 +1,10 @@
 <template>
 	<view class="container">
 		<view class="author">
-			<!-- <image src="../../static/author.png" mode=""></image> -->
-			<view class="box" :style="'background-image: url('+imgUrl+');'"></view>
-			<view class="imgBox" :style="'background-image: url('+imgUrl+');'"></view>
+			<image :src="imgUrl" mode="aspectFill" class="box"></image>
+			<image :src="imgUrl" mode="" class="imgBox"></image>
+			<!-- <view class="box" :style="'background-image: url('+imgUrl+');'"></view> -->
+			<!-- <view class="imgBox" :style="'background-image: url('+imgUrl+');'"></view> -->
 			<view class="title" @click="checkImg()">更改头像</view>
 		</view>
 		
@@ -35,7 +36,8 @@
 	export default {
 		data() {
 			return {
-				imgUrl:'"http://localhost:80/img/author.png"',
+				// imgUrl:'"http://192.168.43.249:80/img/author.png"',
+				imgUrl:'http://192.168.43.249:80/img/author.png',
 				email:'',
 				username:'',
 				sex:"无",
@@ -63,7 +65,18 @@
 								let url = obj.url.slice(index+2);
 								let oldindex = this.imgUrl.indexOf('g');
 								let oldUrl = this.imgUrl.slice(0,oldindex+2);
-								this.imgUrl = oldUrl + url +'"';
+								this.imgUrl = oldUrl + url +'';
+								uni.getStorage({
+								    key: 'userInfo',
+								    success:  (res) => {
+										let userMessage = res.data;
+										userMessage.avatorImg = url
+										uni.setStorage({
+											key:'userInfo',
+											data: userMessage
+										})
+								    }
+								});
 								uni.showToast({
 									title:'更改成功！'
 								})
@@ -88,8 +101,9 @@
 				let oldindex = this.imgUrl.indexOf('g');
 				let oldUrl = this.imgUrl.slice(0,oldindex+2);
 				if(data.avatorImg != '') {
-					this.imgUrl = oldUrl + data.avatorImg +'"';
+					this.imgUrl = oldUrl + data.avatorImg +'';
 				}
+				console.log(this.imgUrl)
 			},
 			changeSexInfo() {
 				let _self = this;
@@ -235,9 +249,11 @@
 		-ms-filter: blur(10px);
 		filter: blur(10px);
 		border: 1px solid #000;
+		width: 100%;
 	}
 	.imgBox{
 		position: relative;
+		display: block;
 		z-index: 999;
 		background: url(../../static/author.png) no-repeat center;
 		background-size: cover;

@@ -63,15 +63,6 @@
 		onLoad(options) {
 			this.kind = options.kind;
 			this.title = options.title;
-			
-			uni.getStorage({
-			    key: 'userInfo',
-			    success:  (res) => {
-					this.email = res.data.email;
-			    }
-			});
-
-		
 			if(this.kind == 'idioms') {
 				this.idKey = 'word';
 				this.listKey = ["id",'成语','拼音','拼音首字母','解释','出自','例子',"_v"];
@@ -115,7 +106,13 @@
 				this.idKey = 'title';
 				this.listKey = ["id",'题目','A.','B.','C.','D.','答案','分析',"_v"];
 			}
-			this.getContent();
+			uni.getStorage({
+			    key: 'userInfo',
+			    success:  (res) => {
+					this.email = res.data.email;
+					this.getContent();
+			    }
+			});
 		},
 		
 	
